@@ -1,0 +1,186 @@
+.admin-dashboard {
+    text-align: center;
+    padding: 20px;
+  
+    h2 {
+      color: #333;
+    }
+  
+    p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+  
+    .logout-btn {
+      margin-top: 20px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  }
+
+  .orders {
+    margin-top: 30px;
+  
+    h2 {
+      width: 100%;
+      text-align: center;
+      border-bottom: 1px solid #000;
+      line-height: 0.1em;
+      margin: 10px 0 20px;
+    }
+  
+    h2 span {
+      font-size: 20px;
+      background: #fff;
+      padding: 0 10px;
+      color: #c62828;
+    }
+  
+    .no-order {
+      justify-content: center;
+  
+      .no-order-img {
+        display: flex;
+        direction: row;
+        justify-content: center;
+      }
+  
+      span {
+        display: flex;
+        direction: row;
+        justify-content: center;
+      }
+    }
+  }
+  
+  .view-package {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+    cursor: pointer;
+  }
+  
+  .view-package span {
+    font-size: 14px;
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .order-list {
+    // background-color: gray;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: calc(100% - 250px);
+    margin-left: 125px;
+    padding: 20px;
+    gap: 20px;
+  
+    .image-container {
+      img {
+        width: 200px;
+        height: 200px;
+  
+        .Date {
+          font-size: 20px;
+          font-weight: bold;
+        }
+      }
+    }
+  
+    .C-P {
+      font-size: 30px;
+      font-weight: 500;
+      color: #c62828;
+    }
+  
+    .order-item {
+      // background-color: rgb(241, 241, 148);
+      width: 100%;
+      padding: 20px;
+  
+      .customer-details {
+        max-height: 200px; // Set a fixed height
+        overflow-y: auto; // Enable vertical scrolling
+        padding: 10px; // Optional for spacing
+        border: 1px solid #ccc; // Optional for visibility
+        background: #f9f9f9; // Optional for better contrast
+      }
+  
+      &:nth-child(odd) {
+        background-color: #fdf7e3;
+  
+        .order-details {
+          .menu-items {
+            max-height: 200px;
+            overflow-y: auto;
+            span {
+              font-size: 20px;
+              font-weight: bold;
+            }
+  
+            img {
+              width: 50px;
+              height: 50px;
+            }
+  
+            .menu-item {
+              display: flex;
+              direction: column;
+              gap: 20px;
+              padding: 10px;
+            }
+          }
+          .price-container {
+            display: flex;
+            direction: column;
+            font-size: 15px;
+            font-weight: bold;
+            gap: 50px;
+          }
+        }
+      }
+      &:nth-child(even) {
+        background-color: #f8e8a0;
+  
+        .order-details {
+          .menu-items {
+            max-height: 200px;
+            overflow-y: auto;
+            span {
+              font-size: 20px;
+              font-weight: bold;
+            }
+  
+            img {
+              width: 50px;
+              height: 50px;
+            }
+  
+            .menu-item {
+              display: flex;
+              direction: column;
+              gap: 20px;
+              padding: 10px;
+            }
+          }
+          .price-container {
+            display: flex;
+            direction: column;
+            font-size: 15px;
+            font-weight: bold;
+            gap: 50px;
+          }
+        }
+      }
+    }
+  }
+  
+  
+  

@@ -1,0 +1,120 @@
+<!-- REGISTER POPUP -->
+<p-dialog
+  [(visible)]="showRegisterPopup"
+  [modal]="false"
+  [style]="{ width: '400px' }"
+  (onHide)="showRegisterPopup = false"
+>
+  <div class="popup-container">
+    <h2 class="title">Welcome To <span class="brand">SmartCater</span></h2>
+    <p class="subtitle">
+      Few Details, Big Impact!<br />Let us show the best for you - &gt;
+    </p>
+
+    <div class="input-group">
+      <input
+        type="text"
+        pInputText
+        placeholder="UserName"
+        [(ngModel)]="user.username"
+        class="input-field"
+      />
+    </div>
+
+    <input
+      type="email"
+      pInputText
+      placeholder="Email"
+      [(ngModel)]="user.email"
+      class="input-field"
+    />
+    <input
+      type="password"
+      pInputText
+      placeholder="Password"
+      [(ngModel)]="user.password"
+      class="input-field"
+    />
+
+    <button
+      pButton
+      label="Continue My Journey"
+      class="continue-btn"
+      (click)="registerUser()"
+    ></button>
+
+    <p class="login-text">
+      Already have an account?
+      <a (click)="openLoginPopup()" class="login-link">Login</a>
+    </p>
+    <button pButton label="Admin Login" class="admin-login-btn" (click)="openAdminLoginPopup()"></button>
+  </div>
+</p-dialog>
+
+<!-- LOGIN POPUP -->
+<p-dialog
+  [(visible)]="showLoginPopup"
+  [modal]="false"
+  [style]="{ width: '350px' }"
+  [breakpoints]="{ '640px': '90vw', '1024px': '50vw' }"
+  (onHide)="showLoginPopup = false"
+>
+  <div class="popup-container">
+    <img src="/assets/logo.png" class="smart-icon" alt="SmartCater" />
+    <h2 class="title">Welcome Back!</h2>
+    <p class="subtitle">We Missed You :</p>
+    <p class="instruction">Fill in the details below to log in</p>
+
+    <input
+      type="text"
+      pInputText
+      placeholder="Email / UserName"
+      class="input-field"
+      [(ngModel)]="user.username"
+    />
+    <input
+      type="text"
+      pInputText
+      placeholder="Password"
+      class="input-field"
+      [(ngModel)]="user.password"
+    />
+
+    <button pButton label="Log In" class="login-btn"  (click)="loginUser()"></button>
+
+    <p>
+      Don't have an account?
+      <a (click)="openRegisterPopup()" class="create-link">Create One</a>
+    </p>
+  </div>
+</p-dialog>
+
+<!-- ADMIN LOGIN POPUP -->
+<p-dialog
+  [(visible)]="showAdminLoginPopup"
+  [modal]="true"
+  [style]="{ width: '350px' }"
+  (onHide)="showAdminLoginPopup = false"
+>
+  <div class="popup-container">
+    <h2 class="title">Admin Login</h2>
+    <p class="subtitle">Restricted Access</p>
+
+    <input
+      type="text"
+      pInputText
+      placeholder="Admin Username"
+      class="input-field"
+      [(ngModel)]="admin.username"
+    />
+    <input
+      type="password"
+      pInputText
+      placeholder="Admin Password"
+      class="input-field"
+      [(ngModel)]="admin.password"
+    />
+
+    <button pButton label="Login as Admin" class="admin-login-btn" (click)="adminLogin()"></button>
+  </div>
+</p-dialog>

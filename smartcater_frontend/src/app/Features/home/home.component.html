@@ -1,0 +1,77 @@
+<app-login></app-login>
+
+<p-carousel [value]="slides" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="3000">
+  <ng-template let-slide pTemplate="item">
+    <div class="carousel-item">
+      <img [src]="slide.image" class="carousel-img" alt="Slide Image">
+    </div>
+  </ng-template>
+</p-carousel>
+
+
+
+<div class="package-container">
+  <h2>CREATE YOUR OWN <span class="highlight">PACKAGE</span></h2>
+  <p class="description">
+    Curate The Flavor Of Your Party From Our Wide Ranged Cuisines And
+    <span class="highlight">Get Instant Price!</span>
+  </p>
+
+  <div class="packages">
+    <div class="package-card" *ngFor="let pkg of packages">
+      <!-- Image Container with Yellow Background -->
+      <div class="image-container">
+        <img
+          [src]="pkg.image"
+          alt="{{ pkg.titlePrefix }}{{ pkg.titleSuffix }}"
+          class="package-img"
+        />
+      </div>
+
+      <!-- Title with Different Colors -->
+      <h3 class="package-title">
+        <span class="red-text">{{ pkg.titlePrefix }}</span
+        >{{ pkg.titleSuffix }}
+      </h3>
+
+      <p class="package-subtitle">{{ pkg.subtitle }}</p>
+      <p class="package-info">{{ pkg.info }}</p>
+
+      <!-- Button for Redirection -->
+      <div class="button-container">
+        <button pButton class="package-btn" (click)="navigateTo(pkg.route)">
+          Create Package
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="our-promise">
+  <h2>OUR <strong>PROMISE</strong></h2>
+  <div class="promise-container">
+    <div class="promise-item" *ngFor="let promise of promises">
+      <div class="image-container">
+        <img [src]="promise.image" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="categories-section">
+  <div class="section-header">
+    <img src="/assets/home/image5.png" alt="Bell Icon" class="bell-icon" />
+    <h2><span>OurCategories</span></h2>
+    <p>Customize Your Party By Mixing Our Services</p>
+  </div>
+
+  <div class="categories-container">
+    <div class="category-card" *ngFor="let category of categories">
+      <img [src]="category.image" [alt]="category.title" class="category-image" />
+    </div>
+  </div>
+
+  
+</div>
+
+

@@ -1,0 +1,833 @@
+<div class="menu-container">
+  <div class="content">
+    <div class="header">
+      <span class="brand-name">Smart<span class="highlight">Cater</span></span>
+    </div>
+    <div class="title">
+      <h1>
+        Customize your
+        <span class="smart">Smart<span class="menu">Menu</span></span>
+      </h1>
+    </div>
+    <p class="subtitle">Get instant quote in just a few easy steps!</p>
+  </div>
+  <div class="visual">
+    <img src="/assets/chef.png" alt="Character" class="ninja-character" />
+    <!-- <img src="assets/-box.png" alt=" Box" class="box-image" /> -->
+  </div>
+</div>
+
+<div class="form-container">
+  <form #basicForm="ngForm">
+    <div class="row">
+      <div class="form-group">
+        <label for="city">City</label>
+        <p-select
+          name="cities"
+          [required]="true"
+          [options]="citylist"
+          [(ngModel)]="order.city"
+          optionLabel="name"
+          optionValue="value"
+          placeholder="Select a City"
+          class="w-full md:w-56"
+          #cities="ngModel"
+        />
+        <!-- <select
+          id="city"
+          class="form-control"
+          name="cities"
+          [(ngModel)]="order.city"
+          cities="ngModel"
+        >
+          <option value="">Select City</option>
+          <option value="city1">City 1</option>
+          <option value="city2">City 2</option>
+        </select> -->
+      </div>
+
+      <div class="form-group">
+        <label for="occasion">Occasion</label>
+        <p-select
+          name="occasions"
+          [required]="true"
+          [options]="occasionList"
+          [(ngModel)]="order.occasion"
+          optionLabel="name"
+          optionValue="value"
+          placeholder="Select a Occasion"
+          class="w-full md:w-56"
+          #occasions="ngModel"
+        />
+        <!-- <select
+          id="occasion"
+          name="occasionValue"
+          [(ngModel)]="order.occasion"
+          class="form-control"
+          #occasionValue="ngModel"
+        >
+          <option>Select Occasion</option>
+          <option value="birthday">Birthday</option>
+          <option value="wedding">Wedding</option>
+        </select> -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="event-date">Event Date</label>
+        <p-datepicker
+          id="dates"
+          [required]="true"
+          placeholder="Select event date"
+          name="eventDates"
+          [(ngModel)]="order.eventDate"
+          #eventDates="ngModel"
+        />
+
+        <!-- <input
+          id="event-date"
+          type="date"
+          class="form-control"
+          name="eventDates"
+          [(ngModel)]="order.eventDate"
+          #eventDates="ngModel"
+        /> -->
+      </div>
+
+      <div class="form-group">
+        <label for="delivery-time">Delivery Time</label>
+        <p-select
+          name="time"
+          [required]="true"
+          [options]="deliveryTimeList"
+          [(ngModel)]="order.deliveryTime"
+          optionLabel="name"
+          optionValue="value"
+          placeholder="Select a Delivery Time"
+          class="w-full md:w-56"
+          #time="ngModel"
+        />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="guests">Guest</label>
+        <!-- <input
+          pInputText
+          name="guest"
+          id="guests"
+          type="number"
+          placeholder="Guest Count"
+          [(ngModel)]="order.guestCount"
+          #guest="ngModel"
+        /> -->
+        <p-inputnumber
+          name="guest"
+          [(ngModel)]="order.guestCount"
+          mode="decimal"
+          [required]="true"
+          [showButtons]="true"
+          inputId="minmax-buttons"
+          placeholder="Guest Count"
+          [min]="20"
+          #guest="ngModel"
+        />
+      </div>
+    </div>
+  </form>
+  <div
+    [ngClass]="{ 'diabled-menues': basicForm.invalid }"
+    class="menu-container1"
+  >
+    <h1>Create Your Menu</h1>
+
+    <div class="starter-content-wrappper">
+      <details style="padding: 20px">
+        <summary>Add Stater</summary>
+        <details style="padding: 20px">
+          <!-- Selected Items List -->
+          <div
+            class="selected-items"
+            *ngIf="display && selectedStarterList.length > 0"
+          >
+            <div
+              class="selected-item"
+              *ngFor="let starter of selectedStarterList; let i = index"
+            >
+              <img
+                [src]="starter.image"
+                [alt]="starter.name"
+                class="item-image"
+              />
+              <div class="item-details">
+                <h4>{{ starter.name }}</h4>
+              </div>
+              <div class="item-quantities">
+                <div class="item-quantity">
+                  <button (click)="increaseQuantity(starter)">+</button>
+                  <div class="item-quantity-unit">
+                    <span>{{ starter.quantity * order.guestCount }} </span>
+                    <span>{{ starter.unit }}</span>
+                  </div>
+                  <button (click)="decreaseQuantity(starter)">-</button>
+                  <i
+                    class="fa-solid fa-trash-can delete-button"
+                    (click)="
+                      removeItem(
+                        i,
+                        starter,
+                        'selectedStarterList',
+                        'staterDtoList'
+                      )
+                    "
+                  ></i>
+                </div>
+
+                <p>Avg. Consumption</p>
+              </div>
+              <div></div>
+            </div>
+          </div>
+          <summary>
+            <span>Select Starter</span> <span>search here to select</span>
+          </summary>
+          <div class="details-content-wrapper">
+            <div class="selection-wrapper">
+              <div class="overflow-wrapper">
+                <ng-container
+                  *ngFor="let starter of staterDtoList; let i = index"
+                >
+                  <div class="stater-item-selection">
+                    <p-checkbox
+                      [inputId]="'starteritem' + starter.id"
+                      name="starters + i"
+                      [(ngModel)]="starter.selected"
+                      [binary]="true"
+                      (onChange)="
+                        onCheckboxChange(starter, 'selectedStarterList', i)
+                      "
+                      #starters="ngModel"
+                    />
+                    <img
+                      [src]="starter.image"
+                      [alt]="starter.name"
+                      class="starter-image"
+                    />
+                    <label for="starterss">
+                      {{ starter.name }}
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <button class="done-button" (click)="display = true">Done</button>
+            </div>
+          </div>
+        </details>
+        <p class="note">*Images are for representation purposes only</p>
+      </details>
+    </div>
+
+    <div class="mains-content-wrappper">
+      <details style="padding: 20px">
+        <summary>Add Main</summary>
+        <details style="padding: 20px">
+          <div
+            class="selected-items"
+            *ngIf="display1 && selectedMainsList.length > 0"
+          >
+            <div
+              class="selected-item"
+              *ngFor="let main of selectedMainsList; let i = index"
+            >
+              <img [src]="main.image" [alt]="main.name" class="item-image" />
+              <div class="item-details">
+                <h4>{{ main.name }}</h4>
+              </div>
+              <div class="item-quantities">
+                <div class="item-quantity">
+                  <button (click)="increaseQuantity(main)">+</button>
+                  <div class="item-quantity-unit">
+                    <span>{{ main.quantity * order.guestCount }} </span>
+                    <span>{{ main.unit }}</span>
+                  </div>
+                  <button (click)="decreaseQuantity(main)">-</button>
+                  <i
+                    class="fa-solid fa-trash-can delete-button"
+                    (click)="
+                      removeItem(i, main, 'selectedMainsList', 'mainDtoList')
+                    "
+                  ></i>
+                </div>
+
+                <p>Avg. Consumption</p>
+              </div>
+              <div></div>
+            </div>
+          </div>
+
+          <summary>
+            <span>Select Main</span>
+            <span>search here to select</span>
+          </summary>
+          <div class="details-content-wrapper">
+            <div class="selection-wrapper">
+              <div class="overflow-wrapper">
+                <ng-container *ngFor="let main of mainDtoList; let i = index">
+                  <div class="mains-item-selection">
+                    <p-checkbox
+                      [inputId]="'mainsitem' + main.id"
+                      name="mains"
+                      [binary]="true"
+                      [(ngModel)]="main.selected"
+                      (onChange)="
+                        onCheckboxChange(main, 'selectedMainsList', i)
+                      "
+                      #mains="ngModel"
+                    />
+
+                    <img
+                      [src]="main.image"
+                      alt="{{ main.name }}"
+                      class="main-image"
+                    />
+                    <label [for]="'mainsitem' + main.id">
+                      {{ main.name }}
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <button class="done-button" (click)="display1 = true">
+                Done
+              </button>
+            </div>
+          </div>
+        </details>
+      </details>
+    </div>
+    <div class="breads-content-wrappper">
+      <details style="padding: 20px">
+        <summary>Add Bread,Rice & Noodles</summary>
+        <details style="padding: 20px">
+          <div
+            class="selected-items"
+            *ngIf="display2 && selectedBreadsList.length > 0"
+          >
+            <div
+              class="selected-item"
+              *ngFor="let bread of selectedBreadsList; let i = index"
+            >
+              <img [src]="bread.image" [alt]="bread.name" class="item-image" />
+              <div class="item-details">
+                <h4>{{ bread.name }}</h4>
+              </div>
+              <div class="item-quantities">
+                <div class="item-quantity">
+                  <button (click)="increaseQuantity(bread)">+</button>
+                  <div class="item-quantity-unit">
+                    <span>{{ bread.quantity * order.guestCount }} </span>
+                    <span>{{ bread.unit }}</span>
+                  </div>
+                  <button (click)="decreaseQuantity(bread)">-</button>
+                  <i
+                    class="fa-solid fa-trash-can delete-button"
+                    (click)="
+                      removeItem(i, bread, 'selectedBreadsList', 'breadDtoList')
+                    "
+                  ></i>
+                </div>
+
+                <p>Avg. Consumption</p>
+              </div>
+            </div>
+          </div>
+
+          <summary>
+            <span>Select Bread,Rice & Noodles</span>
+            <span>search here to select</span>
+          </summary>
+          <div class="details-content-wrapper">
+            <div class="selection-wrapper">
+              <div class="overflow-wrapper">
+                <ng-container *ngFor="let bread of breadDtoList; let i = index">
+                  <div class="breads-item-selection">
+                    <p-checkbox
+                      [inputId]="'breadsitem' + bread.id"
+                      name="breads"
+                      [binary]="true"
+                      [(ngModel)]="bread.selected"
+                      (onChange)="
+                        onCheckboxChange(bread, 'selectedBreadsList', i)
+                      "
+                      #breads="ngModel"
+                    />
+
+                    <img
+                      [src]="bread.image"
+                      alt="{{ bread.name }}"
+                      class="bread-image"
+                    />
+                    <label [for]="'breadsitem' + bread.id">
+                      {{ bread.name }}
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <button class="done-button" (click)="display2 = true">
+                Done
+              </button>
+            </div>
+          </div>
+        </details>
+      </details>
+    </div>
+
+    <div class="desserts-content-wrappper">
+      <details style="padding: 20px">
+        <summary>Add Desserts</summary>
+        <details style="padding: 20px">
+          <div
+            class="selected-items"
+            *ngIf="display3 && selectedDessertList.length > 0"
+          >
+            <div
+              class="selected-item"
+              *ngFor="let dessert of selectedDessertList; let i = index"
+            >
+              <img
+                [src]="dessert?.image"
+                [alt]="dessert?.name"
+                class="item-image"
+              />
+              <div class="item-details">
+                <h4>{{ dessert?.name }}</h4>
+              </div>
+              <div class="item-quantities">
+                <div class="item-quantity">
+                  <button (click)="increaseQuantity(dessert)">+</button>
+                  <div class="item-quantity-unit">
+                    <span *ngIf="dessert"
+                      >{{ dessert?.quantity * order.guestCount }}
+                    </span>
+                    <span>{{ dessert?.unit }}</span>
+                  </div>
+                  <button (click)="decreaseQuantity(dessert)">-</button>
+                  <i
+                    class="fa-solid fa-trash-can delete-button"
+                    (click)="
+                      removeItem(
+                        i,
+                        dessert,
+                        'selectedDessertList',
+                        'dessertDtoList'
+                      )
+                    "
+                  ></i>
+                </div>
+
+                <p>Avg. Consumption</p>
+              </div>
+            </div>
+          </div>
+
+          <summary>
+            <span>Select Desserts</span> <span>search here to select</span>
+          </summary>
+
+          <div class="details-content-wrapper">
+            <div class="selection-wrapper">
+              <div class="overflow-wrapper">
+                <ng-container
+                  *ngFor="let dessertvalue of dessertDtoList; let i = index"
+                >
+                  <div class="desserts-item-selection">
+                    <p-checkbox
+                      [inputId]="'dessertsitem' + dessertvalue.id"
+                      name="desserts"
+                      [binary]="true"
+                      [(ngModel)]="dessertvalue.selected"
+                      (onChange)="
+                        onCheckboxChange(dessertvalue, 'selectedDessertList', i)
+                      "
+                      #desserts="ngModel"
+                    />
+
+                    <img
+                      [src]="dessertvalue.image"
+                      alt="{{ dessertvalue.name }}"
+                      class="dessertvalue-image"
+                    />
+                    <label [for]="'dessertsitem' + dessertvalue.id">
+                      {{ dessertvalue.name }}
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <button class="done-button" (click)="display3 = true">
+                Done
+              </button>
+            </div>
+          </div>
+        </details>
+      </details>
+    </div>
+
+    <div class="liveservice-content-wrappper">
+      <details style="padding: 20px">
+        <summary>Add Liveservice</summary>
+        <details style="padding: 20px">
+          <div
+            class="selected-items"
+            *ngIf="display4 && selectedliveServiceList.length > 0"
+          >
+            <div
+              class="selected-item"
+              *ngFor="let liveservice of selectedliveServiceList; let i = index"
+            >
+              <img
+                [src]="liveservice?.image"
+                [alt]="liveservice?.name"
+                class="item-image"
+              />
+              <div class="item-details">
+                <h4>{{ liveservice?.name }}</h4>
+              </div>
+              <div class="item-quantities">
+                <div class="item-quantity">
+                  <i
+                    class="fa-solid fa-trash-can delete-button"
+                    (click)="
+                      removeItem(
+                        i,
+                        liveservice,
+                        'selectedliveServiceList',
+                        'liveServiceDtoList'
+                      )
+                    "
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <summary>
+            <span>Select Liveservice</span> <span>search here to select</span>
+          </summary>
+
+          <div class="details-content-wrapper">
+            <div class="selection-wrapper">
+              <div class="overflow-wrapper">
+                <ng-container
+                  *ngFor="
+                    let liveservicevalue of liveServiceDtoList;
+                    let i = index
+                  "
+                >
+                  <div class="liveservice-item-selection">
+                    <p-checkbox
+                      [inputId]="'liveserviceitem' + liveservicevalue.id"
+                      name="liveService"
+                      [binary]="true"
+                      [(ngModel)]="liveservicevalue.selected"
+                      (ngModelChange)="
+                        onCheckboxChange(
+                          liveservicevalue,
+                          'selectedliveServiceList',
+                          i
+                        )
+                      "
+                      #liveservice="ngModel"
+                    />
+
+                    <img
+                      [src]="liveservicevalue.image"
+                      alt="{{ liveservicevalue.name }}"
+                      class="liveservicevalue-image"
+                    />
+                    <label [for]="'liveserviceitem' + liveservicevalue.id">
+                      {{ liveservicevalue.name }}
+                    </label>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div class="dropdown-footer">
+              <button class="done-button" (click)="display4 = true">
+                Done
+              </button>
+            </div>
+          </div>
+        </details>
+      </details>
+    </div>
+
+    <div class="summary">
+      <h2>
+        {{ selectedStarterList.length }} Starters +
+        {{ selectedMainsList.length }} Mains +
+        {{ selectedBreadsList.length }} Bread,Rice,Noodles +
+        {{ selectedDessertList.length }} Desserts +
+        {{ selectedliveServiceList.length }} LiveServices
+      </h2>
+      <div
+        style="
+          background-color: #ffc107;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+          margin: 0 auto;
+          width: 70%;
+        "
+      >
+        <h2 style="color: black; font-weight: bold">Details*</h2>
+        <form #detailForm="ngForm">
+          <div class="check-price-wrapper">
+            <div
+              class="details-wrapper"
+              style="
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+              "
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Name"
+                name="customerName"
+                [(ngModel)]="order.customer.name"
+                #customerName="ngModel"
+              />
+              <input
+                type="text"
+                pInputText
+                placeholder="Whatsapp No."
+                name="whatsapp"
+                [(ngModel)]="order.customer.whatsapp"
+                #whatsapp="ngModel"
+              />
+              <input
+                type="email"
+                pInputText
+                placeholder="Email"
+                name="email"
+                [(ngModel)]="order.customer.email"
+              />
+            </div>
+            <button
+              [disabled]="detailForm.invalid || basicForm.invalid"
+              class="price-button"
+              (click)="checkprice()"
+            >
+              Check Price
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div *ngIf="displayprice" class="quotation-container">
+      <!-- PrimeNG Dropdown for Delivery Options -->
+      <div class="server-count">
+        <p-select
+          [options]="deliveryOptions"
+          [(ngModel)]="selectedDeliveryOption"
+          name="delivery"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Services"
+          (onChange)="updateDeliveryCharge($event)"
+          class="w-full md:w-56"
+          #delivery="ngModel"
+        />
+      </div>
+
+      <div *ngIf="displayServersSelection" class="server-wrapper">
+        <p>Server count</p>
+        <div class="server-value-wrapper">
+          <div class="increacebutton">
+            <button (click)="increaseServer()" class="increacebutton1">
+              +
+            </button>
+          </div>
+          <div class="server">
+            <span>{{ servers }} </span>
+          </div>
+          <div class="decreasebutton">
+            <button (click)="decreaseServer()" class="decreasebutton1">
+              -
+            </button>
+          </div>
+        </div>
+        <span>₹{{ servers * 1000 }}</span>
+      </div>
+      <p class="note">(Select Delivery/Service Option)</p>
+
+      <!-- Cost Breakdown -->
+      <div class="cost-breakdown">
+        <div class="foodcost">
+          <div class="cost-row">
+            <span>Food Cost</span>
+            <span>₹{{ foodCost }}</span>
+          </div>
+        </div>
+        <div class="cost-row">
+          <span>Sub Total</span>
+          <span>₹{{ subTotal }}</span>
+        </div>
+        <div class="cost-row">
+          <span>GST</span>
+          <span>₹{{ gst }}</span>
+        </div>
+        <hr />
+        <div class="cost-row grand-total">
+          <span>Grand Total</span>
+          <span>₹{{ grandTotal }}</span>
+        </div>
+        <p class="note">*Delivery charges as per actual</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button
+          pButton
+          type="button"
+          label="Place Order"
+          class="place-order"
+          (click)="placeorder()"
+        >
+          Place Order
+        </button>
+      </div>
+    </div>
+
+    <p-dialog
+      [(visible)]="displaydetails"
+      [modal]="true"
+      [closable]="false"
+      [header]="'Details'"
+      [style]="{ width: '400px' }"
+    >
+      <div class="details-panel">
+        <div class="form-group form-delivery-group">
+          <label for="name" class="details-label">Name:</label>
+          <input
+            id="name"
+            type="text"
+            pInputText
+            name="customerName"
+            [(ngModel)]="order.customer.name"
+            class="input-text"
+            #customerName="ngModel"
+          />
+        </div>
+
+        <div class="form-group form-delivery-group">
+          <label for="whatsapp" class="details-label">WhatsApp No.:</label>
+          <input
+            id="whatsapp"
+            type="text"
+            name="whatsAppNo"
+            pInputText
+            [(ngModel)]="order.customer.whatsapp"
+            class="input-text"
+            #whatsAppNo="ngModel"
+          />
+        </div>
+
+        <div class="form-group form-delivery-group">
+          <label for="email" class="details-label">Email:</label>
+          <input
+            id="email"
+            type="email"
+            pInputText
+            name="email"
+            [(ngModel)]="order.customer.email"
+            class="input-text"
+            #email="ngModel"
+          />
+        </div>
+
+        <h4>Close Address Panel</h4>
+
+        <div class="form-group form-delivery-group">
+          <label for="house" class="details-label">House no/Flat:</label>
+          <input
+            id="house"
+            type="text"
+            pInputText
+            name="house"
+            [(ngModel)]="order.delivery.house"
+            class="input-text"
+            #house="ngModel"
+          />
+        </div>
+
+        <div class="form-group form-delivery-group">
+          <label for="town" class="details-label">Town/Area:</label>
+          <input
+            id="town"
+            type="text"
+            pInputText
+            name="town"
+            [(ngModel)]="order.delivery.town"
+            class="input-text"
+            #town="ngModel"
+          />
+        </div>
+
+        <div class="form-group form-delivery-group">
+          <label for="city" class="details-label">City/Tehsil:</label>
+          <input
+            id="city"
+            type="text"
+            pInputText
+            name="city"
+            [(ngModel)]="order.delivery.city"
+            class="input-text"
+            #city="ngModel"
+          />
+        </div>
+
+        <div class="form-group form-delivery-group">
+          <label for="pincode" class="details-label">PinCode:</label>
+          <input
+            id="pincode"
+            type="text"
+            pInputText
+            name="pin"
+            [(ngModel)]="order.delivery.pinCode"
+            class="input-text"
+            #pin="ngModel"
+          />
+        </div>
+
+        <div class="grand-total">
+          <strong>GRAND TOTAL :</strong> ₹ {{ grandTotal }}
+        </div>
+
+        <div class="button-group">
+          <button
+            pButton
+            class="p-button-secondary"
+            (click)="displaydetails = false"
+          >
+            Go Back
+          </button>
+          <button pButton class="p-button-danger" (click)="paynow()">
+            Confirm & Pay
+          </button>
+        </div>
+      </div>
+    </p-dialog>
+  </div>
+</div>

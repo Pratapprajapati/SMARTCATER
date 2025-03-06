@@ -1,0 +1,185 @@
+<div class="profile-container">
+  <div class="profile">
+    <div class="profimg">
+      <img src="/assets/chefuser.png" alt="Profile" class="profile-img" />
+      <h2 class="brand-name">Smart<span class="highlight">Host</span></h2>
+    </div>
+
+    <div class="profile-info" *ngIf="isLoggedIn">
+      <p>Welcome, {{ userName }}</p>
+      <p>Email: {{ userEmail }}</p>
+      <button class="logout" (click)="logoutUser()">Logout</button>
+    </div>
+
+    <div class="profile-info" *ngIf="!isLoggedIn">
+      <p>Please log in to access your profile.</p>
+    </div>
+  </div>
+</div>
+
+<div class="orders" *ngIf="isLoggedIn">
+  <h2><span>Your Orders</span></h2>
+
+  <div *ngIf="isLoadingOrders" class="loading">
+    <p>Loading orders...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoadingOrders && !errorMessage">
+    <div *ngIf="upcomingOrders.length === 0" class="no-order">
+      <div class="no-order-img">
+        <img src="/assets/userprofile/no_order.png" alt="no_order" />
+      </div>
+      <span>No Orders Yet</span>
+    </div>
+
+    <div *ngIf="upcomingOrders.length > 0" class="order-list">
+      <div *ngFor="let order of upcomingOrders" class="order-item">
+        <div class="image-container">
+          <span>{{ order.status }}</span>
+          <span class="Date">Date: {{ order.eventDate }}</span>
+
+          <img src="/assets/chef.png" alt="Chef" />
+        </div>
+        <div>
+          <div class="C-P">
+            <span>Customized Package</span>
+            <span> For{{ order.guestCount }}Guest</span>
+          </div>
+
+          <details>
+            <summary>Your-Details</summary>
+            <div class="Your-details">
+              <p>Customer Name: {{ order.customer.name }}</p>
+              <p>Customer No: {{ order.customer.whatsapp }}</p>
+              <p>Customer Email: {{ order.customer.email }}</p>
+              <span>Delivery Address:</span>
+              <p>House NO:{{ order.delivery.house }}</p>
+              <p>Town: {{ order.delivery.town }}</p>
+              <p>City: {{ order.delivery.city }}</p>
+              <p>Pincode: {{ order.delivery.pinCode }}</p>
+            </div>
+          </details>
+          <div class="order-details">
+            <h3>{{ order.packageName }}</h3>
+            <p>
+              {{ order.starterList.length }} Starters +
+              {{ order.mainsList.length }} Mains +
+              {{ order.dessertList.length }} Desserts
+            </p>
+            <div class="menu-items">
+              
+              <ng-container
+                *ngIf="order.viewPackege && order.starterList.length > 0"
+              >
+                <span>Starters</span>
+
+                <ng-container *ngFor="let starter of order.starterList">
+                  <div class="menu-item">
+                    <img [src]="starter.image" alt="" />
+                    <p>{{ starter.name }}</p>
+                    <p>QTY: {{ starter.quantity }}{{ starter.unit }}</p>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <!-- <ng-container
+                *ngIf="order.viewPackege && order.starterSaladList.length > 0"
+              >
+                <span>Starters,Salad</span>
+
+                <ng-container *ngFor="let starterSalad of order.starterSaladList">
+                  <div class="menu-item">
+                    <img [src]="starterSalad.image" alt="" />
+                    <p>{{ starterSalad.name }}</p>
+                  </div>
+                </ng-container>
+              </ng-container> -->
+
+              <ng-container
+                *ngIf="order.viewPackege && order.mainsList.length > 0"
+              >
+                <span>Mains</span>
+
+                <ng-container *ngFor="let main of order.mainsList">
+                  <div class="menu-item">
+                    <img [src]="main.image" alt="" />
+                    <p>{{ main.name }}</p>
+                    <p>QTY: {{ main.quantity }}{{ main.unit }}</p>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <!-- <ng-container
+                *ngIf="order.viewPackege && order.dalList.length > 0"
+              >
+                <span>Dals</span>
+
+                <ng-container *ngFor="let dal of order.dalList">
+                  <div class="menu-item">
+                    <img [src]="dal.image" alt="" />
+                    <p>{{ dal.name }}</p>
+                  </div>
+                </ng-container>
+              </ng-container> -->
+
+              <ng-container
+                *ngIf="order.viewPackege && order.breadsList.length > 0"
+              >
+                <span>Breads,Rice,Noodles</span>
+
+                <ng-container *ngFor="let bread of order.breadsList">
+                  <div class="menu-item">
+                    <img [src]="bread.image" alt="" />
+                    <p>{{ bread.name }}</p>
+                    <p>QTY: {{ bread.quantity }}{{ bread.unit }}</p>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <ng-container
+                *ngIf="order.viewPackege && order.dessertList.length > 0"
+              >
+                <span>Desserts</span>
+
+                <ng-container *ngFor="let dessert of order.dessertList">
+                  <div class="menu-item">
+                    <img [src]="dessert.image" alt="" />
+                    <p>{{ dessert.name }}</p>
+                    <p>QTY: {{ dessert.quantity }}{{ dessert.unit }}</p>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <!-- <ng-container
+                *ngIf="order.viewPackege && order.liveservicesList.length > 0"
+              >
+                <span>Live Service</span>
+
+                <ng-container *ngFor="let liveService of order.liveservicesList">
+                  <div class="menu-item">
+                    <img [src]="liveService.image" alt="" />
+                    <p>{{ liveService.name }}</p>
+                    <p>QTY: {{ liveService.quantity }}</p>
+                  </div>
+                </ng-container>
+              </ng-container> -->
+            </div>
+            <div class="price-container">
+              <span class="price">TotalPrice: ₹{{ order.totalPrice }}</span>
+              <span class="delivery-time"
+                >DeliveryTime: {{ order.deliveryTime }}</span
+              >
+            </div>
+          </div>
+          <div class="view-package">
+            <span (click)="onClickViewPackege(order)">View Package</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

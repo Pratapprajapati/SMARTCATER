@@ -1,0 +1,757 @@
+<div class="meal-box-wrapper">
+  <div class="container">
+    <div class="content">
+      <div class="text-section">
+        <h1>
+          <span class="Smart">Smart</span><span class="Cater">Cater</span>
+        </h1>
+        <img src="/assets/mealbox1.png" alt="meal-box" />
+      </div>
+      <div class="image-section">
+        <img src="/assets/mealbox.png" alt="Meal Box" />
+      </div>
+    </div>
+    <button class="create-package">Create My Package</button>
+  </div>
+
+  <div class="form-container">
+    <h2>Please Fill The Details Below</h2>
+    <div class="form-elements">
+      <div class="form-group">
+        <label for="city">City</label>
+        <p-select
+          name="cities"
+          [required]="true"
+          [options]="citylist"
+          [(ngModel)]="order.city"
+          optionLabel="name"
+          optionValue="value"
+          placeholder="Select a City"
+          class="w-full md:w-56"
+          #cities="ngModel"
+        />
+      </div>
+      <div class="form-group">
+        <label for="date">Event Date</label>
+        <p-datepicker
+          id="dates"
+          [required]="true"
+          placeholder="Select event date"
+          name="eventDates"
+          [(ngModel)]="order.eventDate"
+          #eventDates="ngModel"
+        />
+      </div>
+      <div class="form-group">
+        <label for="guests">Guest</label>
+        <div class="guest-count">
+          <p-inputnumber
+            name="guest"
+            [(ngModel)]="order.guestCount"
+            mode="decimal"
+            [required]="true"
+            [showButtons]="true"
+            inputId="minmax-buttons"
+            placeholder="Guest Count"
+            [min]="0"
+            [max]="100"
+            #guest="ngModel"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="delivery-time">Delivery Time</label>
+        <p-select
+          name="time"
+          [required]="true"
+          [options]="deliveryTimeList"
+          [(ngModel)]="order.deliveryTime"
+          optionLabel="name"
+          optionValue="value"
+          placeholder="Select a Delivery Time"
+          class="w-full md:w-56"
+          #time="ngModel"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="package">
+  <h2 style="margin-left: 400px">Create Your Own Package</h2>
+</div>
+
+<div class="meal-selection">
+  <h1>Select a box</h1>
+  <div class="meal-options">
+    <div
+      class="meal-option"
+      id="3cp-meal"
+      [ngClass]="{ selected: selectedMeal === '3cp-meal' }"
+      (click)="selectMeal('3cp-meal'); toggleDiv(1)"
+      [(ngModel)]="order.boxtype"
+    >
+      <img src="/assets/3cp.png" alt="3CP-Meal" />
+      <p>3CP-Meal</p>
+    </div>
+    <div
+      class="meal-option"
+      id="6cp"
+      [ngClass]="{ selected: selectedMeal === '6cp' }"
+      (click)="selectMeal('6cp'); toggleDiv(2)"
+      [(ngModel)]="order.boxtype"
+    >
+      <img src="/assets/6cp.png" alt="6CP" />
+      <p>6CP</p>
+    </div>
+    <div
+      class="meal-option"
+      id="8cp"
+      [ngClass]="{ selected: selectedMeal === '8cp' }"
+      (click)="selectMeal('8cp'); toggleDiv(3)"
+      [(ngModel)]="order.boxtype"
+    >
+      <img src="/assets/8cp.png" alt="8CP" />
+      <p>8CP</p>
+    </div>
+  </div>
+</div>
+<div class="menu-container">
+  <div *ngIf="activeDiv === 1">
+    <h1>Create Your 3CP-Meal Menu !</h1>
+  </div>
+  <div *ngIf="activeDiv === 2">
+    <h1>Create Your 6CP-Meal Menu !</h1>
+  </div>
+  <div *ngIf="activeDiv === 3">
+    <h1>Create Your 8CP-Meal Menu !</h1>
+  </div>
+  <div
+    *ngIf="activeDiv === 1 || activeDiv === 2 || activeDiv === 3"
+    class="StarterSalad-content-wrappper"
+  >
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Starter,Salad</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container
+              *ngFor="let starterSalad of starterSaladDtoList; let i = index"
+            >
+              <div class="StarterSalad-item-selection">
+                <p-checkbox
+                  [inputId]="'starterSaladitem' + starterSalad.id"
+                  [name]="'starterSalad' + i"
+                  [binary]="true"
+                  [(ngModel)]="starterSalad.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      starterSalad,
+                      'selectedStarterSaladList',
+                      selectionLimits.starterSalad,
+                      'starterSaladDtoList'
+                    )
+                  "
+                  #starterSalads="ngModel"
+                />
+                <img
+                  [src]="starterSalad.image"
+                  alt="{{ starterSalad.name }}"
+                  class="starterSalad-image"
+                />
+                <label [for]="'starterSaladitem' + starterSalad.id">
+                  {{ starterSalad.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display2 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display2 && selectedStarterSaladList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let starterSalad of selectedStarterSaladList; let i = index"
+        >
+          <img
+            [src]="starterSalad.image"
+            [alt]="starterSalad.name"
+            class="item-image"
+          />
+          <div class="item-details">
+            <h4>{{ starterSalad.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="
+                removeItem(
+                  i,
+                  starterSalad,
+                  'selectedStarterSaladList',
+                  'starterSaladDtoList'
+                )
+              "
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div
+    *ngIf="activeDiv === 1 || activeDiv === 2 || activeDiv === 3"
+    class="Main-content-wrappper"
+  >
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Mains</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container *ngFor="let main of mainDtoList; let i = index">
+              <div class="mains-item-selection">
+                <p-checkbox
+                  [inputId]="'mainsitem' + main.id"
+                  [name]="'mains' + i"
+                  [binary]="true"
+                  [(ngModel)]="main.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      main,
+                      'selectedMainsList',
+                      selectionLimits.main,
+                      'mainDtoList'
+                    )
+                  "
+                  #mains="ngModel"
+                />
+                <img
+                  [src]="main.image"
+                  alt="{{ main.name }}"
+                  class="main-image"
+                />
+                <label [for]="'mainsitem' + main.id">
+                  {{ main.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display1 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display1 && selectedMainsList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let main of selectedMainsList; let i = index"
+        >
+          <img [src]="main.image" [alt]="main.name" class="item-image" />
+          <div class="item-details">
+            <h4>{{ main.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="removeItem(i, main, 'selectedMainsList', 'mainDtoList')"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div *ngIf="activeDiv === 1" class="BreadRice-content-wrappper">
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Bread,Rice</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container
+              *ngFor="let breadRice of breadRiceDtoList; let i = index"
+            >
+              <div class="BreadRice-item-selection">
+                <p-checkbox
+                  [inputId]="'breadRiceitem' + breadRice.id"
+                  [name]="'breadRice' + i"
+                  [binary]="true"
+                  [(ngModel)]="breadRice.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      breadRice,
+                      'selectedBreadRiceList',
+                      selectionLimits.breadRice,
+                      'breadRiceDtoList'
+                    )
+                  "
+                  #breadrice="ngModel"
+                />
+                <img
+                  [src]="breadRice.image"
+                  alt="{{ breadRice.name }}"
+                  class="breadRice-image"
+                />
+                <label [for]="'breadRiceitem' + breadRice.id">
+                  {{ breadRice.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display3 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display3 && selectedBreadRiceList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let breadRice of selectedBreadRiceList; let i = index"
+        >
+          <img
+            [src]="breadRice.image"
+            [alt]="breadRice.name"
+            class="item-image"
+          />
+          <div class="item-details">
+            <h4>{{ breadRice.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="
+                removeItem(
+                  i,
+                  breadRice,
+                  'selectedBreadRiceList',
+                  'breadRiceDtoList'
+                )
+              "
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div
+    *ngIf="activeDiv === 2 || activeDiv === 3"
+    class="breads-content-wrappper"
+  >
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Breads</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container *ngFor="let bread of breadDtoList; let i = index">
+              <div class="breads-item-selection">
+                <p-checkbox
+                  [inputId]="'breadsitem' + bread.id"
+                  [name]="'breads' + i"
+                  [binary]="true"
+                  [(ngModel)]="bread.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      bread,
+                      'selectedBreadsList',
+                      selectionLimits.breads,
+                      'breadDtoList'
+                    )
+                  "
+                  #breads="ngModel"
+                />
+                <img
+                  [src]="bread.image"
+                  alt="{{ bread.name }}"
+                  class="bread-image"
+                />
+                <label [for]="'breadsitem' + bread.id">
+                  {{ bread.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display1 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display1 && selectedBreadsList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let bread of selectedBreadsList; let i = index"
+        >
+          <img [src]="bread.image" [alt]="bread.name" class="item-image" />
+          <div class="item-details">
+            <h4>{{ bread.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="
+                removeItem(i, bread, 'selectedBreadsList', 'breadDtoList')
+              "
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div *ngIf="activeDiv === 2 || activeDiv === 3" class="rice-content-wrappper">
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Rice</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container *ngFor="let rice of riceDtoList; let i = index">
+              <div class="rice-item-selection">
+                <p-checkbox
+                  [inputId]="'riceitem' + rice.id"
+                  [name]="'rice' + i"
+                  [binary]="true"
+                  [(ngModel)]="rice.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      rice,
+                      'selectedRiceList',
+                      selectionLimits.rice,
+                      'riceDtoList'
+                    )
+                  "
+                  #rice="ngModel"
+                />
+                <img
+                  [src]="rice.image"
+                  alt="{{ rice.name }}"
+                  class="rice-image"
+                />
+                <label [for]="'riceitem' + rice.id">
+                  {{ rice.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display1 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display1 && selectedRiceList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let rice of selectedRiceList; let i = index"
+        >
+          <img [src]="rice.image" [alt]="rice.name" class="item-image" />
+          <div class="item-details">
+            <h4>{{ rice.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="removeItem(i, rice, 'selectedRiceList', 'riceDtoList')"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div *ngIf="activeDiv === 2 || activeDiv === 3" class="Dal-content-wrappper">
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Dal</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container *ngFor="let dal of dalDtoList; let i = index">
+              <div class="dal-item-selection">
+                <p-checkbox
+                  [inputId]="'dalitem' + dal.id"
+                  [name]="'dal' + i"
+                  [binary]="true"
+                  [(ngModel)]="dal.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      dal,
+                      'selectedDalList',
+                      selectionLimits.dal,
+                      'dalDtoList'
+                    )
+                  "
+                  #dals="ngModel"
+                />
+                <img [src]="dal.image" alt="{{ dal.name }}" class="dal-image" />
+                <label [for]="'dalitem' + dal.id">
+                  {{ dal.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display1 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display1 && selectedDalList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let dal of selectedDalList; let i = index"
+        >
+          <img [src]="dal.image" [alt]="dal.name" class="item-image" />
+          <div class="item-details">
+            <h4>{{ dal.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="removeItem(i, dal, 'selectedDalList', 'dalDtoList')"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+  <div *ngIf="activeDiv === 3" class="Dessert-content-wrappper">
+    <details style="padding: 20px">
+      <summary>
+        <span>Search Desserts</span> <span>click here to select</span>
+      </summary>
+      <div class="details-content-wrapper">
+        <div class="selection-wrapper">
+          <div class="overflow-wrapper">
+            <ng-container *ngFor="let dessert of dessertDtoList; let i = index">
+              <div class="dessert-item-selection">
+                <p-checkbox
+                  [inputId]="'dessertitem' + dessert.id"
+                  [name]="'dessert' + i"
+                  [binary]="true"
+                  [(ngModel)]="dessert.selected"
+                  (onChange)="
+                    onCheckboxChange(
+                      dessert,
+                      'selectedDessertList',
+                      selectionLimits.dessert,
+                      'dessertDtoList'
+                    )
+                  "
+                  #desserts="ngModel"
+                />
+                <img
+                  [src]="dessert.image"
+                  alt="{{ dessert.name }}"
+                  class="dessert-image"
+                />
+                <label [for]="'dessertitem' + dessert.id">
+                  {{ dessert.name }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="dropdown-footer">
+          <button class="done-button" (click)="display1 = true">Done</button>
+        </div>
+      </div>
+      <div
+        class="selected-items"
+        *ngIf="display1 && selectedDessertList.length > 0"
+      >
+        <div
+          class="selected-item"
+          *ngFor="let dessert of selectedDessertList; let i = index"
+        >
+          <img [src]="dessert.image" [alt]="dessert.name" class="item-image" />
+          <div class="item-details">
+            <h4>{{ dessert.name }}</h4>
+          </div>
+          <div>
+            <i
+              class="fa-solid fa-trash-can delete-button"
+              (click)="
+                removeItem(i, dessert, 'selectedDessertList', 'dessertDtoList')
+              "
+            ></i>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div
+    *ngIf="activeDiv === 1 || activeDiv === 2 || activeDiv === 3"
+    class="getprice"
+  >
+    <button class="price-button" (click)="checkprice()">Check Price</button>
+  </div>
+
+  <div *ngIf="displayprice" class="quotation-container">
+    <div class="cost-breakdown">
+      <div class="foodcost">
+        <div class="cost-row">
+          <span>Food Cost</span>
+          <span>₹{{ totalFoodCost }}</span>
+        </div>
+      </div>
+
+      <div class="cost-row">
+        <span>GST</span>
+        <span>₹{{ gst }}</span>
+      </div>
+      <hr />
+      <div class="cost-row grand-total">
+        <span>Grand Total</span>
+        <span>₹{{ grandTotal }}</span>
+      </div>
+      <p class="note">*Delivery charges as per actual</p>
+    </div>
+
+    <div class="button-group">
+      <button
+        pButton
+        type="button"
+        label="Place Order"
+        class="place-order"
+        (click)="placeorder()"
+      >
+        Place Order
+      </button>
+    </div>
+  </div>
+  <p-dialog
+    [(visible)]="displaydetails"
+    [modal]="true"
+    [closable]="false"
+    [header]="'Details'"
+    [style]="{ width: '400px' }"
+  >
+    <div class="details-panel">
+      <div class="form-group">
+        <label for="name" class="details-label">Name:</label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          [(ngModel)]="order.customer.name"
+          class="input-text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="whatsapp" class="details-label">WhatsApp No.:</label>
+        <input
+          id="whatsapp"
+          type="text"
+          pInputText
+          [(ngModel)]="order.customer.whatsapp"
+          class="input-text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="details-label">Email:</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          [(ngModel)]="order.customer.email"
+          class="input-text"
+        />
+      </div>
+
+      <h4>Close Address Panel</h4>
+
+      <div class="form-group">
+        <label for="house" class="details-label">House no/Flat:</label>
+        <input
+          id="house"
+          type="text"
+          pInputText
+          [(ngModel)]="order.delivery.house"
+          class="input-text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="town" class="details-label">Town/Area:</label>
+        <input
+          id="town"
+          type="text"
+          pInputText
+          [(ngModel)]="order.delivery.town"
+          class="input-text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="city" class="details-label">City/Tehsil:</label>
+        <input
+          id="city"
+          type="text"
+          pInputText
+          [(ngModel)]="order.delivery.city"
+          class="input-text"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="pincode" class="details-label">PinCode:</label>
+        <input
+          id="pincode"
+          type="text"
+          pInputText
+          [(ngModel)]="order.delivery.pinCode"
+          class="input-text"
+        />
+      </div>
+
+      <div class="grand-total">
+        <strong>GRAND TOTAL :</strong> ₹ {{ grandTotal }}
+      </div>
+
+      <div class="button-group">
+        <button
+          pButton
+          label="Go Back"
+          class="p-button-secondary"
+          (click)="displaydetails = false"
+        >
+          Go Back
+        </button>
+        <button
+          pButton
+          label="Confirm & Pay"
+          class="p-button-danger"
+          (click)="placeOrder()"
+        >
+          Confirm & Pay
+        </button>
+      </div>
+    </div>
+  </p-dialog>
+</div>

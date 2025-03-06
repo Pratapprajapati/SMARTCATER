@@ -1,0 +1,28 @@
+.content {
+  display: flex;
+  flex-direction: column;
+
+  .content-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column; // Ensure proper stacking
+    height: calc(100% - 100px);
+    position: relative;
+    top: 100px;
+
+    .main-view {
+      flex: 1; // Allows main-view to take up available space
+      width: calc(100% - 250px);
+      position: relative;
+      left: 250px;
+      overflow: auto; // Prevent content from being cut off
+      padding-bottom: 300px;
+    }
+
+    app-footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+}
